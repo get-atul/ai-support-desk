@@ -11,10 +11,10 @@ load_dotenv()
 def run_pipeline(source :str, language :str = "english") -> dict:
     print("starting AI Video Assistant")
 
-    #chunks = process_input(source)
+    chunks = process_input(source)
 
-    #transcript = transcribe_all(chunks,language)
-    transcript = "During World War II, Germany conquered France in just six weeks. On May 10th, 1940, Germany launched a Blitzkrieg, a lightning war, tearing through Belgium and the Netherlands. The Allies rushed north to stop them. But that's exactly what Hitler wanted. German tanks suddenly appeared in the Ardennes";
+    transcript = transcribe_all(chunks,language)
+    #transcript = "During World War II, Germany conquered France in just six weeks. On May 10th, 1940, Germany launched a Blitzkrieg, a lightning war, tearing through Belgium and the Netherlands. The Allies rushed north to stop them. But that's exactly what Hitler wanted. German tanks suddenly appeared in the Ardennes";
     print(f"raw transcription (first 300 characters ) {transcript[:200]}")
 
     title = generate_title(transcript)
