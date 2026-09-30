@@ -93,3 +93,41 @@ def get_project_knowledge_sources(
         )
 
         return list(session.scalars(statement).all())    
+
+
+def get_knowledge_source(
+    source_id: str,
+) -> KnowledgeSource | None:
+
+    with SessionLocal() as session:
+        statement = (
+            select(KnowledgeSource)
+            .where(KnowledgeSource.id == source_id)
+        )
+
+        return session.scalar(statement)    
+
+
+def update_knowledge_source_status(
+    source_id: str,
+    status: str,
+) -> KnowledgeSource:
+
+    with SessionLocal() as session:
+
+        source = session.get(
+            KnowledgeSource,
+            source_id,
+        )
+
+        if source is None:
+            raise ValueError(
+                f"Knowledge source '{source_id}' does not exist."
+            )
+
+        source.status = status
+
+        session.commit()
+        session.refresh(source)
+
+        return source    

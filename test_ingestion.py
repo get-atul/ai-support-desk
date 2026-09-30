@@ -44,10 +44,6 @@ print("=" * 60)
 
 document = ingest_text_source(
     source_id=source.id,
-    project_id=source.project_id,
-    source_name=source.name,
-    storage_path=source.storage_path,
-    source_type=source.source_type,
 )
 
 

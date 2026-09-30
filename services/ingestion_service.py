@@ -1,38 +1,77 @@
-from core.vector_store import add_document
 from pathlib import Path
 
 from core.document import DocumentContent
+from core.vector_store import add_document
+from database.repository import (
+    get_knowledge_source,
+    update_knowledge_source_status,
+)
 
 
 def ingest_text_source(
     source_id: str,
-    project_id: str,
-    source_name: str,
-    storage_path: str,
-    source_type: str,
 ) -> DocumentContent:
 
-    file_path = Path(storage_path)
+    source = get_knowledge_source(source_id)
 
-    if not file_path.exists():
-        raise FileNotFoundError(
-            f"Source file not found: {file_path}"
+    if source is None:
+        raise ValueError(
+            f"Knowledge source '{source_id}' does not exist."
         )
 
-    text = file_path.read_text(
-        encoding="utf-8"
+    update_knowledge_source_status(
+        source_id,
+        "processing",
     )
 
-    return DocumentContent(
-        text=text,
-        source_id=source_id,
-        project_id=project_id,
-        source_name=source_name,
-        source_type=source_type,
-        language="en",
-    )
+    try:
+
+        file_path = Path(source.storage_path)
+
+        if not file_path.exists():
+            raise FileNotFoundError(
+                f"Source file not found: {file_path}"
+            )
+
+        text = file_path.read_text(
+            encoding="utf-8"
+        )
+
+        document = DocumentContent(
+            text=text,
+            source_id=source.id,
+            project_id=source.project_id,
+            source_name=source.name,
+            source_type=source.source_type,
+            language="en",
+        )
+
+        add_document(document)
+
+        update_knowledge_source_status(
+            source_id,
+            "completed",
+        )
+
+        return document
+
+    except Exception:
+
+        update_knowledge_source_status(
+            source_id,
+            "failed",
+        )
+
+        raise
+
 
 def index_document(
     document: DocumentContent,
 ):
-    return add_document(document)
+    print("Starting vector indexing...")
+
+    result = add_document(document)
+
+    print("Vector indexing completed.")
+
+    return result
