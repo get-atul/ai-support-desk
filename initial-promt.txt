@@ -1,0 +1,394 @@
+I am building a production-oriented AI knowledge and support platform called **AI Support Desk**.
+
+Please treat this as an ongoing software architecture/development project, not as a simple RAG demo.
+
+## 1. Overall goal
+
+I want to build a web application where users can:
+
+1. Create multiple projects.
+2. Select an active project.
+3. Add knowledge/data to that project.
+4. Ask questions about that project's knowledge.
+5. Receive answers using RAG + an LLM.
+6. Keep knowledge completely isolated between projects.
+
+The long-term goal is an **industry-standard, extensible AI knowledge platform**, so please avoid shortcuts that would make future scaling, security, multi-tenancy, or additional data types difficult.
+
+## 2. Knowledge ingestion requirements
+
+A project should eventually support multiple knowledge sources, including:
+
+* Text
+* PDF
+* DOC/DOCX
+* Excel/CSV where appropriate
+* Images
+* Audio
+* Video
+* Web content
+* Possibly URLs
+* Pasted text
+
+Audio and video should eventually go through transcription before being indexed.
+
+Images may eventually require OCR and/or multimodal vision models.
+
+The architecture should therefore separate:
+
+**Source ingestion → extraction/transformation → chunking → embedding → vector storage → retrieval → LLM response**
+
+Do not tightly couple the RAG system to only "meeting transcripts".
+
+## 3. Future multilingual requirement
+
+The platform should eventually support multiple languages.
+
+The architecture should therefore not assume that all documents or questions are English.
+
+Future capabilities may include:
+
+* multilingual documents
+* multilingual embeddings
+* multilingual questions
+* translation where required
+* language detection
+* language-aware transcription
+* potentially different models for different languages
+
+We don't need to implement all of this immediately, but the architecture should allow it without a major rewrite.
+
+## 4. Current technology
+
+I am using Python.
+
+Current important technologies:
+
+* Python
+* LangChain
+* Chroma as the current vector database
+* HuggingFace `all-MiniLM-L6-v2` embeddings
+* OpenAI LLM
+* `gpt-5-nano`
+* FastAPI is planned for the API layer
+* Simple HTML/JavaScript is planned initially for the frontend
+* SQLite can be used initially for application/project metadata
+* Docker/cloud deployment will be considered later
+
+I am currently developing on Windows.
+
+My project directory is approximately:
+
+```text
+ai-support-desk/
+│
+├── core/
+│   ├── extractor.py
+│   ├── rag_engine.py
+│   ├── summarizer.py
+│   ├── transcriber.py
+│   └── vector_store.py
+│
+├── utils/
+│   └── audio_processor.py
+│
+├── vector_db/
+│
+├── .env
+├── test.py
+└── ...
+```
+
+## 5. Current RAG implementation
+
+My current RAG implementation already works.
+
+`core/vector_store.py` currently:
+
+* creates HuggingFace embeddings
+* uses `all-MiniLM-L6-v2`
+* uses Chroma
+* stores the vector database in `vector_db`
+* uses `RecursiveCharacterTextSplitter`
+* uses chunk size 500
+* uses chunk overlap 50
+* retrieves the top 4 chunks using similarity search
+
+`core/rag_engine.py` currently:
+
+* creates an OpenAI `ChatOpenAI` instance
+* uses `gpt-5-nano`
+* loads the Chroma vector store
+* creates a retriever
+* builds an LCEL RAG chain
+* formats retrieved documents
+* sends context + question to the LLM
+* returns a string answer
+
+The current prompt instructs the model to answer only from the retrieved context and say:
+
+"I could not find this information in the meeting transcript."
+
+when the answer isn't available.
+
+We already tested loading the existing RAG chain successfully.
+
+## 6. Current status
+
+We have already verified that:
+
+```text
+Existing Chroma DB
+        ↓
+load_vector_store()
+        ↓
+retriever
+        ↓
+OpenAI LLM
+        ↓
+RAG chain
+        ↓
+question
+        ↓
+answer
+```
+
+works successfully.
+
+We also fixed a bug where `get_retriever()` required the vector store argument.
+
+The current test successfully produced:
+
+```text
+Loading RAG...
+Question: What was discussed in the meeting?
+Answer: I could not find this information in the meeting transcript.
+```
+
+This confirms that the RAG pipeline itself is operational.
+
+## 7. Important architectural requirement: projects
+
+The application must be project-aware.
+
+For example:
+
+```text
+Project: Customer Support
+    ├── refund-policy.pdf
+    ├── support-call.mp3
+    └── FAQ.docx
+
+Project: HR
+    ├── employee-policy.pdf
+    └── leave-policy.docx
+
+Project: VideturPro
+    ├── legal-faq.pdf
+    ├── previous-cases.docx
+    └── website content
+```
+
+When the user selects `Customer Support`, the chatbot must retrieve information ONLY from the Customer Support knowledge base.
+
+It must never accidentally retrieve information from HR or another project.
+
+## 8. Preferred initial architecture
+
+I currently expect something approximately like:
+
+```text
+                    Web UI
+                      │
+                      ▼
+                   FastAPI
+                      │
+          ┌───────────┼───────────┐
+          ▼           ▼           ▼
+      Projects     Ingestion     Chat
+       Service      Service      Service
+          │           │           │
+          ▼           ▼           ▼
+       SQLite       Processing    RAG
+                       │            │
+                       ▼            ▼
+                    Chunks       Chroma
+                                    │
+                                    ▼
+                                   LLM
+```
+
+However, don't blindly follow this architecture.
+
+If there is a better industry-standard architecture, explain why and recommend it.
+
+## 9. Vector database/project isolation
+
+I initially considered:
+
+```text
+vector_db/
+    project_A/
+    project_B/
+    project_C/
+```
+
+but I am open to a better design.
+
+For the initial version, using Chroma collections/namespaces per project may be appropriate.
+
+However, please think about:
+
+* multi-tenancy
+* project isolation
+* metadata filtering
+* scalability
+* security
+* indexing
+* migration to a production vector database later
+* whether Chroma should remain the long-term vector DB
+* whether PostgreSQL + pgvector or another vector DB would be more appropriate eventually
+
+Do not prematurely overengineer the current local development environment, but don't create an architecture that will require a complete rewrite later.
+
+## 10. Desired development approach
+
+I want to build this **step by step**.
+
+For every step:
+
+1. Explain what we are changing.
+2. Explain why we are changing it.
+3. Give me the exact file(s) to create/change.
+4. Give me the exact code.
+5. Give me the exact command to run.
+6. Tell me what output I should expect.
+7. Test that layer before moving to the next layer.
+8. Do not give me 10 steps at once when implementation is involved.
+
+I want to understand the architecture while building it.
+
+## 11. Important development principle
+
+Do NOT immediately build the frontend.
+
+The preferred sequence is:
+
+```text
+1. Architecture
+2. Project management
+3. Project-aware knowledge storage
+4. Document ingestion abstraction
+5. Text ingestion
+6. RAG retrieval
+7. LLM response
+8. Audio ingestion
+9. Video ingestion
+10. Image/OCR ingestion
+11. Multilingual architecture
+12. FastAPI
+13. API testing
+14. Simple web UI
+15. Authentication/security
+16. Docker
+17. Cloud deployment
+18. Production improvements
+```
+
+We can adjust this sequence when there is a strong architectural reason.
+
+## 12. Production-oriented concerns
+
+Keep future requirements in mind:
+
+* authentication and authorization
+* user/project ownership
+* multi-tenancy
+* API security
+* file validation
+* file size limits
+* asynchronous processing for large files
+* background jobs
+* ingestion status/progress
+* failed ingestion handling
+* document versioning
+* document deletion
+* re-indexing
+* metadata
+* citations/source references in answers
+* logging
+* monitoring
+* cost tracking
+* model selection
+* rate limiting
+* secrets management
+* database migrations
+* testing
+* Docker
+* cloud deployment
+* scalability
+
+Don't implement all of these now. Just ensure early architectural decisions don't unnecessarily block them.
+
+## 13. Current priority
+
+The next thing I want to implement is:
+
+**Project management + project-aware RAG architecture.**
+
+Before adding FastAPI or the frontend, I want to establish:
+
+```text
+Create Project
+      ↓
+Project ID
+      ↓
+Project Knowledge Base
+      ↓
+Add knowledge
+      ↓
+Retrieve knowledge
+      ↓
+Ask question
+```
+
+Then test that:
+
+```text
+Project A question
+```
+
+cannot retrieve information belonging to:
+
+```text
+Project B
+```
+
+## 14. How I want you to behave
+
+Act as a senior Python/AI solution architect and development mentor.
+
+Prefer:
+
+* clean separation of concerns
+* modular architecture
+* explicit interfaces
+* testability
+* maintainability
+* production-oriented patterns
+* simple implementation where appropriate
+* incremental development
+
+Avoid:
+
+* unnecessary frameworks
+* premature microservices
+* overengineering
+* rewriting working code without a reason
+* treating this as a toy chatbot
+* assuming everything will remain English/text-only
+* putting all functionality into one Python file
+
+When recommending a technology, explain the trade-off briefly.
+
+Most importantly, **remember where we currently are**: the existing RAG pipeline already works, and we are now redesigning the surrounding architecture to support multiple projects and multiple knowledge formats before exposing it through FastAPI and a web UI.
