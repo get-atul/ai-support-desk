@@ -5,7 +5,11 @@ from fastapi import (
     File,
     UploadFile,
 )
+from fastapi.responses import FileResponse
 
+from database.repository import (
+    get_knowledge_source,
+)
 from services.source_service import add_source
 from services.ingestion_service import (
     ingest_source,
@@ -205,3 +209,67 @@ def list_sources(
         }
         for source in sources
     ]
+
+
+@router.get("/{project_id}/sources/{source_id}/view")
+def view_source(
+    project_id: str,
+    source_id: str,
+):
+    source = get_knowledge_source(source_id)
+
+    if source is None:
+        raise ValueError(
+            f"Knowledge source '{source_id}' does not exist."
+        )
+
+    if source.project_id != project_id:
+        raise ValueError(
+            "Knowledge source does not belong to this project."
+        )
+
+    file_path = Path(source.storage_path)
+
+    if not file_path.exists():
+        raise FileNotFoundError(
+            f"Source file not found: {file_path}"
+        )
+
+    return FileResponse(
+        path=file_path,
+        media_type=source.mime_type,
+        filename=source.name,
+        content_disposition_type="inline",
+    )
+
+
+@router.get("/{project_id}/sources/{source_id}/download")
+def download_source(
+    project_id: str,
+    source_id: str,
+):
+    source = get_knowledge_source(source_id)
+
+    if source is None:
+        raise ValueError(
+            f"Knowledge source '{source_id}' does not exist."
+        )
+
+    if source.project_id != project_id:
+        raise ValueError(
+            "Knowledge source does not belong to this project."
+        )
+
+    file_path = Path(source.storage_path)
+
+    if not file_path.exists():
+        raise FileNotFoundError(
+            f"Source file not found: {file_path}"
+        )
+
+    return FileResponse(
+        path=file_path,
+        media_type=source.mime_type,
+        filename=source.name,
+        content_disposition_type="attachment",
+    )

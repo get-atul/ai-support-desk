@@ -209,6 +209,35 @@
             color: #6b7280;
             padding: 20px 0;
         }
+        .document-actions {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.action-button {
+    display: inline-block;
+    padding: 6px 10px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+.view-button {
+    background: #eef2ff;
+    color: #3730a3;
+}
+
+.download-button {
+    background: #f0fdf4;
+    color: #166534;
+}
+
+.action-button:hover {
+    opacity: 0.8;
+}
 
         @media (max-width: 600px) {
 
@@ -222,6 +251,65 @@
 
         }
 
+        .project-selector {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .primary-button,
+        .secondary-button {
+            border: none;
+            border-radius: 6px;
+            padding: 9px 14px;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        .primary-button {
+            background: #2563eb;
+            color: white;
+        }
+
+        .secondary-button {
+            background: #e5e7eb;
+            color: #374151;
+        }
+
+        .primary-button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .new-project-form {
+            margin-top: 20px;
+            padding: 20px;
+            border: 1px solid #e5e7eb;
+            border-radius: 10px;
+            background: #f9fafb;
+            max-width: 600px;
+        }
+
+        .new-project-form h3 {
+            margin-top: 0;
+            margin-bottom: 15px;
+        }
+
+        .new-project-form input,
+        .new-project-form textarea {
+            width: 100%;
+            box-sizing: border-box;
+            margin-bottom: 12px;
+            padding: 10px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 10px;
+        }
     </style>
 
 </head>
@@ -253,6 +341,45 @@
     </div>
 
 
+    <div
+    id="newProjectForm"
+    class="new-project-form"
+    style="display: none;"
+>
+    <h3>Create New Project</h3>
+
+    <input
+        type="text"
+        id="projectName"
+        placeholder="Project name"
+    >
+
+    <textarea
+        id="projectDescription"
+        placeholder="Project description (optional)"
+        rows="3"
+    ></textarea>
+
+    <div class="form-actions">
+        <button
+            type="button"
+            id="createProjectButton"
+            class="primary-button"
+        >
+            Create Project
+        </button>
+
+        <button
+            type="button"
+            id="cancelProjectButton"
+            class="secondary-button"
+        >
+            Cancel
+        </button>
+    </div>
+
+    <div id="projectMessage"></div>
+</div>
     <!-- Upload -->
 
     <div class="card">
@@ -261,18 +388,22 @@
             Upload Knowledge
         </h2>
 
-        <label for="project">
-            Project
-        </label>
+        <div class="project-selector">
+            <label for="projectSelect">Project</label>
 
-        <select id="project">
+            <select id="projectSelect">
+                <option value="">Select a project</option>
+            </select>
 
-            <option value="">
-                Select a project
-            </option>
-
-        </select>
-
+            <button
+                type="button"
+                id="newProjectButton"
+                class="primary-button"
+                style="margin-bottom: 20px;"
+            >
+                +
+            </button>
+        </div>
 
         <label for="file">
             Document
@@ -315,27 +446,12 @@
                 <thead>
 
                     <tr>
-
-                        <th>
-                            Document
-                        </th>
-
-                        <th>
-                            Type
-                        </th>
-
-                        <th>
-                            Size
-                        </th>
-
-                        <th>
-                            Status
-                        </th>
-
-                        <th>
-                            Uploaded
-                        </th>
-
+                        <th>Document</th>
+                        <th>Type</th>
+                        <th>Size</th>
+                        <th>Status</th>
+                        <th>Uploaded</th>
+                        <th>Actions</th>
                     </tr>
 
                 </thead>
@@ -373,7 +489,7 @@
 
     const projectSelect =
         document.getElementById(
-            "project"
+            "projectSelect"
         );
 
 
@@ -398,7 +514,139 @@
     // --------------------------------
     // Load projects
     // --------------------------------
+const newProjectButton =
+    document.getElementById("newProjectButton");
 
+const newProjectForm =
+    document.getElementById("newProjectForm");
+
+const createProjectButton =
+    document.getElementById("createProjectButton");
+
+const cancelProjectButton =
+    document.getElementById("cancelProjectButton");
+
+const projectName =
+    document.getElementById("projectName");
+
+const projectDescription =
+    document.getElementById("projectDescription");
+
+const projectMessage =
+    document.getElementById("projectMessage");
+
+
+newProjectButton.addEventListener(
+    "click",
+    () => {
+        newProjectForm.style.display = "block";
+        projectName.focus();
+    }
+);
+
+
+cancelProjectButton.addEventListener(
+    "click",
+    () => {
+        newProjectForm.style.display = "none";
+
+        projectName.value = "";
+        projectDescription.value = "";
+        projectMessage.textContent = "";
+    }
+);
+
+
+createProjectButton.addEventListener(
+    "click",
+    async () => {
+
+        const name =
+            projectName.value.trim();
+
+        const description =
+            projectDescription.value.trim();
+
+        if (!name) {
+            projectMessage.textContent =
+                "Please enter a project name.";
+
+            return;
+        }
+
+        createProjectButton.disabled = true;
+
+        projectMessage.textContent =
+            "Creating project...";
+
+        try {
+
+            const response = await fetch(
+                `${API_BASE_URL}/projects/`,
+                {
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type":
+                            "application/json"
+                    },
+
+                    body: JSON.stringify({
+                        name: name,
+                        description:
+                            description || null
+                    })
+                }
+            );
+
+            if (!response.ok) {
+
+                const errorText =
+                    await response.text();
+
+                throw new Error(
+                    errorText ||
+                    "Failed to create project."
+                );
+            }
+
+            const project =
+                await response.json();
+
+            projectMessage.textContent =
+                "Project created successfully.";
+
+            projectName.value = "";
+            projectDescription.value = "";
+
+            await loadProjects();
+
+            projectSelect.value =
+                project.id;
+
+            newProjectForm.style.display =
+                "none";
+
+            await loadDocuments(project.id);
+
+        } catch (error) {
+
+            console.error(
+                "Create project error:",
+                error
+            );
+
+            projectMessage.textContent =
+                error.message ||
+                "Failed to create project.";
+
+        } finally {
+
+            createProjectButton.disabled =
+                false;
+        }
+    }
+);
     async function loadProjects() {
 
         try {
@@ -453,7 +701,7 @@
 
         }
 
-    }
+    };
 
 
     // --------------------------------
@@ -593,43 +841,48 @@
                             : "-";
 
 
-                    row.innerHTML = `
+                            row.innerHTML = `
+                                <td>${escapeHtml(source.name)}</td>
 
-                        <td>
-                            ${escapeHtml(
-                                source.name
-                            )}
-                        </td>
+                                <td>
+                                    ${escapeHtml(source.source_type).toUpperCase()}
+                                </td>
 
-                        <td>
-                            ${escapeHtml(
-                                source.source_type
-                            ).toUpperCase()}
-                        </td>
+                                <td>
+                                    ${size}
+                                </td>
 
-                        <td>
-                            ${size}
-                        </td>
+                                <td>
+                                    <span class="status ${statusClass}">
+                                        ${escapeHtml(source.status)}
+                                    </span>
+                                </td>
 
-                        <td>
+                                <td>
+                                    ${uploaded}
+                                </td>
 
-                            <span
-                                class="status ${statusClass}"
-                            >
-                                ${escapeHtml(
-                                    source.status
-                                )}
-                            </span>
+                                <td>
+                                    <div class="document-actions">
 
-                        </td>
+                                        <a
+                                            href="${API_BASE_URL}/projects/${projectId}/sources/${source.id}/view"
+                                            target="_blank"
+                                            class="action-button view-button"
+                                        >
+                                            View
+                                        </a>
 
-                        <td>
-                            ${uploaded}
-                        </td>
+                                        <a
+                                            href="${API_BASE_URL}/projects/${projectId}/sources/${source.id}/download"
+                                            class="action-button download-button"
+                                        >
+                                            Download
+                                        </a>
 
-                    `;
-
-
+                                    </div>
+                                </td>
+                            `;
                     documentsBody.appendChild(
                         row
                     );

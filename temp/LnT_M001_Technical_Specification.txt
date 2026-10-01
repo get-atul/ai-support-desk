@@ -1,0 +1,138 @@
+L&T MACHINE M001
+TECHNICAL SPECIFICATION AND OPERATION GUIDE
+Document No: LT-M001-TS-04 | Revision: C | Issue Date: March 2024
+(Note: This is a sample document created for RAG testing. All data is fictional.)
+
+==========================================================
+PAGE 1
+==========================================================
+
+1. INTRODUCTION
+
+The L&T Machine M001 is a heavy-duty, CNC-controlled hydraulic forming press designed for the production of mid-sized precision metal components. It was first released in 2019 at the company's manufacturing facility in Vadodara, Gujarat, and the current production model is the Revision C unit. The M001 is primarily used in the automotive, agricultural equipment, and railway component industries, where repeatable forming accuracy and long service life are essential.
+
+The M001 was developed to replace the older L&T Machine K500 series. Compared to the K500, the M001 delivers 35% higher throughput, consumes 18% less energy per formed part, and offers a significantly improved operator interface with a 15-inch touchscreen panel. The design life of the machine is 100,000 operating hours, assuming that all scheduled maintenance activities are carried out on time.
+
+The machine is built around a four-column steel frame, a servo-hydraulic drive system, and the L&T SmartForm V3 control system. The frame is constructed from stress-relieved cast steel (grade ST-52), which provides excellent rigidity and minimal deflection under full load. Each of the four columns is chrome-plated and hardened to 58 HRC to resist wear from the sliding guides.
+
+Intended users of this document include machine operators, production supervisors, installation engineers, and plant managers. Maintenance and safety procedures are covered separately in the M001 Maintenance and Safety Manual (Document No. LT-M001-MS-02). Readers should consult both documents before commissioning the machine.
+
+2. MAIN TECHNICAL SPECIFICATIONS
+
+The following specifications apply to the standard M001 configuration. Optional configurations may differ and are described in the Options Catalogue.
+
+Maximum press force: 800 kN (kilonewtons)
+Stroke length: 400 mm
+Maximum ram speed (approach): 250 mm/s
+Maximum pressing speed: 40 mm/s
+Return speed: 300 mm/s
+Bed size: 1,200 mm x 800 mm
+Daylight (maximum opening between bed and ram): 750 mm
+Positioning accuracy: +/- 0.02 mm
+Repeatability: +/- 0.01 mm
+Machine weight: 9,400 kg
+Overall dimensions (L x W x H): 2,600 mm x 1,900 mm x 3,350 mm
+Noise level during operation: 74 dB(A) measured at 1 metre
+Operating ambient temperature range: 5 degrees C to 40 degrees C
+
+The positioning accuracy of +/- 0.02 mm is guaranteed only when the machine has been properly warmed up and the ambient temperature does not vary by more than 5 degrees C during a single shift. Under unstable temperature conditions, accuracy may degrade to +/- 0.05 mm.
+
+==========================================================
+PAGE 2
+==========================================================
+
+3. POWER AND ELECTRICAL REQUIREMENTS
+
+The M001 requires a three-phase electrical supply of 415 V, 50 Hz. The rated power consumption in Standard mode is 45 kW at full load. The main drive motor is a 37 kW servo motor, while the remaining power is shared among the hydraulic pump auxiliaries, the cooling system, the control cabinet, and the lighting.
+
+The recommended main supply cable is a 4-core copper cable with a cross-section of 25 square millimetres. The machine must be connected to a dedicated 100 A circuit breaker. Sharing this breaker with other equipment is not permitted, because voltage drops caused by other machines can trigger undervoltage faults in the servo drive.
+
+The voltage tolerance of the machine is plus or minus 10 percent. If the supply voltage falls outside this range, the control system will display warning W-12 and will inhibit new press cycles until the supply returns to normal. Installations in regions with unstable grid power are strongly advised to fit an external voltage stabiliser rated at a minimum of 60 kVA.
+
+An emergency stop circuit is wired independently of the main control system. When any of the four emergency stop buttons is pressed, power to the servo drive is cut within 0.3 seconds, and the hydraulic accumulator is automatically isolated from the main circuit.
+
+4. HYDRAULIC AND COOLING SYSTEM
+
+The hydraulic system of the M001 operates at a maximum working pressure of 210 bar. The hydraulic reservoir has a capacity of 320 litres and is filled with ISO VG 46 hydraulic oil. The normal operating oil temperature range is 40 degrees C to 55 degrees C. If the oil temperature exceeds 65 degrees C, the control system raises alarm A-31 and the machine will complete the current cycle and stop automatically.
+
+An integrated water-cooled heat exchanger keeps the oil within its normal temperature range. The cooling circuit requires a clean water supply at a flow rate of at least 25 litres per minute and an inlet temperature not higher than 30 degrees C. Where the plant water is hard or contains a high level of dissolved solids, the use of an inline filter with a 50 micron rating is mandatory to prevent scaling of the heat exchanger.
+
+The system includes a bladder-type hydraulic accumulator with a volume of 10 litres, pre-charged with nitrogen to 90 bar. The accumulator helps the pump meet short peaks in flow demand and provides a controlled energy reserve to complete a safe return stroke if power is lost.
+
+==========================================================
+PAGE 3
+==========================================================
+
+5. CONTROL SYSTEM
+
+The M001 is controlled by the L&T SmartForm V3 system, which runs on a real-time industrial controller. The operator interacts with the machine through a 15-inch colour touchscreen mounted on an adjustable arm. The interface is available in English, Hindi, Tamil, and German.
+
+SmartForm V3 can store up to 200 separate job programs, each containing the stroke length, pressing speed, dwell time, and force profile for a particular component. Programs can be transferred to the machine using a USB drive or over the plant Ethernet network. Remote monitoring over the network is read-only by default; remote control of the press is disabled for safety reasons and can only be enabled by an L&T service engineer with a special licence key.
+
+The control system keeps an event log of the last 10,000 events, including alarms, warnings, mode changes, and operator logins. There are three user access levels: Operator, Supervisor, and Technician. Operators can run existing programs but cannot edit them. Supervisors can create and edit programs. Only Technicians can change machine calibration data and safety parameters.
+
+Position feedback is provided by a linear glass-scale encoder with a resolution of 1 micron, and force is measured by a strain-gauge load cell mounted under the ram. These two sensors allow the system to perform both position-controlled and force-controlled pressing.
+
+6. OPERATING MODES
+
+The M001 offers three operating modes that can be selected from the touchscreen by a Supervisor or Technician.
+
+Standard Mode: This is the default mode, delivering the full rated performance. In Standard mode, the machine produces up to 120 parts per hour for a typical 30-second cycle component, and draws up to 45 kW of power at full load.
+
+Eco Mode: This mode is intended for plants that want to reduce energy costs when the production schedule is not tight. In Eco mode, ram speeds are reduced by 20 percent compared to Standard mode, resulting in a proportional reduction in output. Power consumption is reduced by 30 percent. Eco mode is not recommended for components that require a high pressing speed for correct material flow.
+
+Precision Mode: In this mode, the pressing speed is limited to 15 mm/s and the controller uses force-controlled pressing with a 0.5-second dwell at peak force. Positioning accuracy improves to +/- 0.01 mm. Output in Precision mode is limited to a maximum of 60 parts per hour. This mode is typically used for high-value aerospace and railway components.
+
+Switching between modes during a running cycle is not possible. The machine must complete its current cycle and return to the top position before a new mode can take effect.
+
+==========================================================
+PAGE 4
+==========================================================
+
+7. STARTUP PROCEDURE
+
+The following steps must be followed in sequence every time the machine is started from a cold condition, meaning that it has been switched off for more than 4 hours.
+
+Step 1: Inspect the work area. Remove any tools, loose parts, or debris from the bed and the surrounding floor. Confirm that all safety guards are closed and that the light curtain is clear.
+
+Step 2: Check the hydraulic oil level on the sight glass. The level must be between the MIN and MAX marks. Do not start the machine if the level is below MIN.
+
+Step 3: Turn the main isolator switch to the ON position. The control cabinet will power up, and the SmartForm V3 screen will display the L&T logo followed by the login page. The boot process takes approximately 90 seconds.
+
+Step 4: Log in with your user credentials and acknowledge any active warnings. Check that the emergency stop buttons are released.
+
+Step 5: Start the warm-up cycle by selecting "Warm-up" on the home screen. The warm-up routine runs the ram at reduced speed and no load for 12 minutes. This circulates the oil and brings the hydraulic system to its working temperature.
+
+Step 6: The machine will not allow production mode to start until the oil temperature reaches at least 35 degrees C. Once this condition is met and the warm-up cycle has completed, the "Ready" indicator turns green and the operator may load a job program.
+
+Step 7: Run one dry cycle without material to confirm correct motion before beginning production.
+
+If the machine has been off for less than 4 hours, a shortened warm-up of 3 minutes is sufficient, provided the oil temperature is already above 35 degrees C.
+
+8. SHUTDOWN PROCEDURE
+
+At the end of a shift, finish the current cycle and move the ram to its top position. Select "Park" on the touchscreen so that the ram locks mechanically in the top position. Remove all material from the bed and wipe off any oil or coolant residue. Turn the main isolator to OFF only after the touchscreen displays the message "Safe to power down", which appears about 20 seconds after the Park routine finishes. Cutting power before this message appears can leave pressure trapped in the accumulator and may cause an alarm at the next startup.
+
+==========================================================
+PAGE 5
+==========================================================
+
+9. INSTALLATION REQUIREMENTS
+
+The M001 must be installed on a reinforced concrete foundation with a minimum thickness of 600 mm and a compressive strength of at least 30 MPa (grade M30). The foundation must be level to within 0.5 mm per metre. A vibration-damping pad is recommended if the machine is installed within 10 metres of another heavy press or a forging hammer.
+
+A minimum clearance of 1.5 metres must be maintained on all four sides of the machine to allow safe operator access and maintenance work. The ceiling height of the installation hall must be at least 4.5 metres to allow for removal of the ram during major overhauls. Overhead crane capacity must be at least 12 tonnes to handle the heaviest sub-assemblies, such as the ram and the main cylinder.
+
+Anchor bolts are supplied with the machine: eight M30 bolts of grade 8.8. They must be tightened to a torque of 650 Nm. After the first 100 hours of operation, the bolts must be re-torqued, and the foundation levelling must be re-checked.
+
+Commissioning must be carried out by an authorised L&T service engineer. The commissioning process typically takes three working days and includes electrical checks, hydraulic pressure tests at 1.25 times the working pressure, calibration of the position encoder and load cell, and a test run with the customer's sample component.
+
+10. WARRANTY AND SUPPORT
+
+The standard warranty on the M001 is 24 months from the date of commissioning, or 4,000 operating hours, whichever occurs first. The warranty covers manufacturing defects and failure of components under normal operating conditions. It does not cover damage caused by operation outside the specified conditions, failure to follow the maintenance schedule, unauthorised modification of safety parameters, or use of non-approved hydraulic oil.
+
+An extended warranty of up to 5 years in total can be purchased at the time of ordering. The extended warranty requires that all scheduled maintenance be carried out by an L&T authorised service centre and that service records be kept up to date.
+
+For technical support, customers can contact the L&T Customer Support Centre at the telephone number provided with the machine documentation. Support is available Monday to Saturday, from 8:00 AM to 8:00 PM IST. For critical breakdowns, the guaranteed response time is 24 hours for installations within India and 72 hours for international installations.
+
+END OF DOCUMENT

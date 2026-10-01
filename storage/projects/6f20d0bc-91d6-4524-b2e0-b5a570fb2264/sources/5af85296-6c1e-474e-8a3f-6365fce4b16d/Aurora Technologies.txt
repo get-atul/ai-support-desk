@@ -1,0 +1,18 @@
+Aurora Technologies: Company Overview
+
+Aurora Technologies was founded in 2011 by Meera Kapoor and Daniel Whitfield in Pune, India. The company began as a three-person startup building inventory software for small retailers. In 2014, it moved its headquarters to Bengaluru after raising a Series A round of $4.2 million led by Horizon Ventures.
+
+Products
+Aurora's flagship product is StockSense, an inventory management platform launched in 2013. In 2017, the company released PayBridge, a payment reconciliation tool, and in 2020 it launched Lumen, an AI-based demand forecasting engine. Lumen reduced stockouts by 27% for pilot customers in its first year. StockSense remains the highest-revenue product, contributing about 58% of annual revenue in 2023.
+
+Leadership and Team
+Meera Kapoor serves as CEO, while Daniel Whitfield left day-to-day operations in 2019 and now sits on the board as an advisor. The current CTO is Rohan Desai, who joined in 2016 after working at a logistics firm in Hyderabad. As of 2023, Aurora employs 412 people across offices in Bengaluru, Pune, and Singapore.
+
+Financials
+In fiscal year 2023, Aurora reported revenue of $38.6 million, up from $29.1 million in 2022. The company became profitable for the first time in 2021. In 2022, it raised a Series C round of $45 million, led by Northbridge Capital, to fund expansion into Southeast Asia.
+
+Policies
+Aurora follows a hybrid work policy: employees work from the office three days a week, with Wednesdays and Fridays designated as remote days. Each employee receives an annual learning budget of Rs. 60,000. The company's data is hosted on servers in Mumbai and Singapore, and all customer data is encrypted using AES-256.
+
+Future Plans
+Aurora plans to open an office in Jakarta in 2025. It also intends to release a new product called Orbit, a supply chain visibility dashboard, by the second quarter of 2025. The company aims to reach 600 employees by the end of 2025.
