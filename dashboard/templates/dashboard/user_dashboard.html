@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>AI Support Desk</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family:
+                Arial,
+                Helvetica,
+                sans-serif;
+
+            background: #f5f7fb;
+            color: #1f2937;
+        }
+
+        .header {
+            background: white;
+            border-bottom: 1px solid #e5e7eb;
+            padding: 18px 32px;
+
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 21px;
+            font-weight: 700;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 50px auto;
+            padding: 0 20px;
+        }
+
+        .title {
+            text-align: center;
+            margin-bottom: 35px;
+        }
+
+        .title h1 {
+            margin-bottom: 10px;
+            font-size: 32px;
+        }
+
+        .title p {
+            color: #6b7280;
+        }
+
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+
+            border: 1px solid #e5e7eb;
+
+            box-shadow:
+                0 4px 15px
+                rgba(0, 0, 0, 0.04);
+        }
+
+        label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        select,
+        textarea {
+
+            width: 100%;
+
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+
+            padding: 12px;
+
+            font-size: 15px;
+
+            margin-bottom: 20px;
+
+            background: white;
+        }
+
+        textarea {
+
+            min-height: 120px;
+
+            resize: vertical;
+        }
+
+        button {
+
+            width: 100%;
+
+            padding: 13px;
+
+            border: none;
+            border-radius: 8px;
+
+            background: #2563eb;
+            color: white;
+
+            font-size: 16px;
+            font-weight: 600;
+
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #1d4ed8;
+        }
+
+        .answer {
+
+            margin-top: 25px;
+
+            padding: 20px;
+
+            background: #f8fafc;
+
+            border-radius: 10px;
+
+            border: 1px solid #e5e7eb;
+
+            min-height: 100px;
+        }
+
+        .answer-title {
+
+            font-weight: 600;
+
+            margin-bottom: 10px;
+        }
+
+        .sources {
+
+            margin-top: 20px;
+
+            font-size: 14px;
+
+            color: #6b7280;
+        }
+
+        @media (max-width: 600px) {
+
+            .header {
+                padding: 15px 20px;
+            }
+
+            .container {
+                margin-top: 25px;
+            }
+
+            .title h1 {
+                font-size: 26px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+    <header class="header">
+
+        <div class="logo">
+            AI Support Desk
+        </div>
+
+        <div>
+            User
+        </div>
+
+    </header>
+
+
+    <main class="container">
+
+        <div class="title">
+
+            <h1>
+                How can I help you?
+            </h1>
+
+            <p>
+                Select a project and ask a question
+                from its knowledge base.
+            </p>
+
+        </div>
+
+
+        <div class="card">
+
+            <label for="project">
+                Select Project
+            </label>
+
+            <select id="project">
+
+                <option value="">
+                    Select a project
+                </option>
+
+                <!-- Projects will be loaded from FastAPI -->
+
+            </select>
+
+
+            <label for="question">
+                Your Question
+            </label>
+
+            <textarea
+                id="question"
+                placeholder="Ask something about the selected project..."
+            ></textarea>
+
+
+            <button onclick="askQuestion()">
+                Ask AI
+            </button>
+
+
+            <div
+                id="answer"
+                class="answer"
+            >
+
+                <div class="answer-title">
+                    AI Answer
+                </div>
+
+                <div id="answerText">
+
+                    Select a project and ask
+                    a question to get started.
+
+                </div>
+
+            </div>
+
+
+            <div
+                id="sources"
+                class="sources"
+            ></div>
+
+        </div>
+
+    </main>
+
+
+    <script>
+
+        const API_BASE_URL =
+            "http://127.0.0.1:8001";
+
+
+        async function loadProjects() {
+
+            try {
+
+                const response =
+                    await fetch(
+                        `${API_BASE_URL}/projects/`
+                    );
+
+                const projects =
+                    await response.json();
+
+                const select =
+                    document.getElementById(
+                        "project"
+                    );
+
+                projects.forEach(
+                    project => {
+
+                        const option =
+                            document.createElement(
+                                "option"
+                            );
+
+                        option.value =
+                            project.id;
+
+                        option.textContent =
+                            project.name;
+
+                        select.appendChild(
+                            option
+                        );
+
+                    }
+                );
+
+            }
+            catch (error) {
+
+                console.error(
+                    "Failed to load projects:",
+                    error
+                );
+
+            }
+
+        }
+
+
+        async function askQuestion() {
+
+            const projectId =
+                document.getElementById(
+                    "project"
+                ).value;
+
+            const question =
+                document.getElementById(
+                    "question"
+                ).value.trim();
+
+            const answerText =
+                document.getElementById(
+                    "answerText"
+                );
+
+            const sources =
+                document.getElementById(
+                    "sources"
+                );
+
+
+            if (!projectId) {
+
+                answerText.textContent =
+                    "Please select a project.";
+
+                return;
+
+            }
+
+
+            if (!question) {
+
+                answerText.textContent =
+                    "Please enter a question.";
+
+                return;
+
+            }
+
+
+            answerText.textContent =
+                "Thinking...";
+
+            sources.innerHTML = "";
+
+
+            try {
+
+                const response =
+                    await fetch(
+                        `${API_BASE_URL}/projects/${projectId}/chat`,
+                        {
+                            method: "POST",
+
+                            headers: {
+                                "Content-Type":
+                                    "application/json"
+                            },
+
+                            body: JSON.stringify({
+                                question: question
+                            })
+                        }
+                    );
+
+
+                const result =
+                    await response.json();
+
+
+                answerText.textContent =
+                    result.answer;
+
+
+                if (
+                    result.sources &&
+                    result.sources.length > 0
+                ) {
+
+                    sources.innerHTML =
+                        "<strong>Sources:</strong><br>" +
+                        result.sources
+                            .map(
+                                source =>
+                                    source.source_name
+                            )
+                            .join("<br>");
+
+                }
+
+            }
+            catch (error) {
+
+                console.error(error);
+
+                answerText.textContent =
+                    "Unable to get an answer. "
+                    + "Please try again.";
+
+            }
+
+        }
+
+
+        loadProjects();
+
+    </script>
+
+</body>
+
+</html>

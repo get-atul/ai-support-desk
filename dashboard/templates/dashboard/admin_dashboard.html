@@ -1,0 +1,927 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>AI Support Desk - Admin</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family:
+                Arial,
+                Helvetica,
+                sans-serif;
+
+            background: #f5f7fb;
+            color: #1f2937;
+        }
+
+        .header {
+            background: white;
+            border-bottom: 1px solid #e5e7eb;
+
+            padding: 18px 32px;
+
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 21px;
+            font-weight: 700;
+        }
+
+        .role {
+            color: #6b7280;
+            font-size: 14px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        h1 {
+            margin-bottom: 8px;
+        }
+
+        .subtitle {
+            color: #6b7280;
+            margin-bottom: 30px;
+        }
+
+        .card {
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+
+            padding: 25px;
+            margin-bottom: 25px;
+
+            box-shadow:
+                0 4px 15px
+                rgba(0, 0, 0, 0.04);
+        }
+
+        .card h2 {
+            margin-top: 0;
+        }
+
+        label {
+            display: block;
+
+            font-weight: 600;
+
+            margin-bottom: 8px;
+        }
+
+        select,
+        input[type="file"] {
+
+            width: 100%;
+
+            padding: 12px;
+
+            border: 1px solid #d1d5db;
+
+            border-radius: 8px;
+
+            background: white;
+
+            margin-bottom: 18px;
+        }
+
+        button {
+
+            padding: 12px 20px;
+
+            border: none;
+
+            border-radius: 8px;
+
+            background: #2563eb;
+
+            color: white;
+
+            font-size: 15px;
+
+            font-weight: 600;
+
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #1d4ed8;
+        }
+
+        button:disabled {
+            background: #9ca3af;
+            cursor: not-allowed;
+        }
+
+        .message {
+
+            margin-top: 15px;
+
+            padding: 12px;
+
+            border-radius: 8px;
+
+            display: none;
+        }
+
+        .documents {
+            overflow-x: auto;
+        }
+
+        table {
+
+            width: 100%;
+
+            border-collapse: collapse;
+        }
+
+        th,
+        td {
+
+            text-align: left;
+
+            padding: 13px 10px;
+
+            border-bottom:
+                1px solid #e5e7eb;
+        }
+
+        th {
+            font-size: 14px;
+            color: #6b7280;
+        }
+
+        .status {
+
+            display: inline-block;
+
+            padding: 5px 9px;
+
+            border-radius: 20px;
+
+            font-size: 12px;
+
+            font-weight: 600;
+        }
+
+        .status-completed {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .status-processing {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .status-failed {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .status-pending {
+            background: #e5e7eb;
+            color: #374151;
+        }
+
+        .empty {
+            color: #6b7280;
+            padding: 20px 0;
+        }
+
+        @media (max-width: 600px) {
+
+            .header {
+                padding: 15px 20px;
+            }
+
+            .container {
+                margin-top: 25px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+<header class="header">
+
+    <div class="logo">
+        AI Support Desk
+    </div>
+
+    <div class="role">
+        Admin
+    </div>
+
+</header>
+
+
+<main class="container">
+
+    <h1>
+        Admin Dashboard
+    </h1>
+
+    <div class="subtitle">
+        Manage project knowledge and documents.
+    </div>
+
+
+    <!-- Upload -->
+
+    <div class="card">
+
+        <h2>
+            Upload Knowledge
+        </h2>
+
+        <label for="project">
+            Project
+        </label>
+
+        <select id="project">
+
+            <option value="">
+                Select a project
+            </option>
+
+        </select>
+
+
+        <label for="file">
+            Document
+        </label>
+
+        <input
+            type="file"
+            id="file"
+        >
+
+
+        <button
+            id="uploadButton"
+            onclick="uploadDocument()"
+        >
+            Upload Document
+        </button>
+
+
+        <div
+            id="message"
+            class="message"
+        ></div>
+
+    </div>
+
+
+    <!-- Documents -->
+
+    <div class="card">
+
+        <h2>
+            Uploaded Documents
+        </h2>
+
+        <div class="documents">
+
+            <table>
+
+                <thead>
+
+                    <tr>
+
+                        <th>
+                            Document
+                        </th>
+
+                        <th>
+                            Type
+                        </th>
+
+                        <th>
+                            Size
+                        </th>
+
+                        <th>
+                            Status
+                        </th>
+
+                        <th>
+                            Uploaded
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody id="documentsBody">
+
+                    <tr>
+
+                        <td
+                            colspan="5"
+                            class="empty"
+                        >
+                            Select a project to view
+                            documents.
+                        </td>
+
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</main>
+
+
+<script>
+
+    const API_BASE_URL =
+        "http://127.0.0.1:8001";
+
+
+    const projectSelect =
+        document.getElementById(
+            "project"
+        );
+
+
+    const documentsBody =
+        document.getElementById(
+            "documentsBody"
+        );
+
+
+    const message =
+        document.getElementById(
+            "message"
+        );
+
+
+    const uploadButton =
+        document.getElementById(
+            "uploadButton"
+        );
+
+
+    // --------------------------------
+    // Load projects
+    // --------------------------------
+
+    async function loadProjects() {
+
+        try {
+
+            const response =
+                await fetch(
+                    `${API_BASE_URL}/projects/`
+                );
+
+
+            if (!response.ok) {
+
+                throw new Error(
+                    "Failed to load projects."
+                );
+
+            }
+
+
+            const projects =
+                await response.json();
+
+
+            projects.forEach(
+                project => {
+
+                    const option =
+                        document.createElement(
+                            "option"
+                        );
+
+                    option.value =
+                        project.id;
+
+                    option.textContent =
+                        project.name;
+
+                    projectSelect.appendChild(
+                        option
+                    );
+
+                }
+            );
+
+        }
+        catch (error) {
+
+            showMessage(
+                error.message,
+                true
+            );
+
+        }
+
+    }
+
+
+    // --------------------------------
+    // Project changed
+    // --------------------------------
+
+    projectSelect.addEventListener(
+        "change",
+        function () {
+
+            const projectId =
+                projectSelect.value;
+
+
+            if (!projectId) {
+
+                documentsBody.innerHTML =
+                    `
+                    <tr>
+                        <td
+                            colspan="5"
+                            class="empty"
+                        >
+                            Select a project to view
+                            documents.
+                        </td>
+                    </tr>
+                    `;
+
+                return;
+
+            }
+
+
+            loadDocuments(
+                projectId
+            );
+
+        }
+    );
+
+
+    // --------------------------------
+    // Load documents
+    // --------------------------------
+
+    async function loadDocuments(
+        projectId
+    ) {
+
+        documentsBody.innerHTML =
+            `
+            <tr>
+                <td
+                    colspan="5"
+                    class="empty"
+                >
+                    Loading documents...
+                </td>
+            </tr>
+            `;
+
+
+        try {
+
+            const response =
+                await fetch(
+                    `${API_BASE_URL}/projects/${projectId}/sources`
+                );
+
+
+            if (!response.ok) {
+
+                throw new Error(
+                    "Failed to load documents."
+                );
+
+            }
+
+
+            const documents =
+                await response.json();
+
+
+            if (
+                !documents ||
+                documents.length === 0
+            ) {
+
+                documentsBody.innerHTML =
+                    `
+                    <tr>
+                        <td
+                            colspan="5"
+                            class="empty"
+                        >
+                            No documents uploaded
+                            for this project.
+                        </td>
+                    </tr>
+                    `;
+
+                return;
+
+            }
+
+
+            documentsBody.innerHTML = "";
+
+
+            documents.forEach(
+                source => {
+
+                    const row =
+                        document.createElement(
+                            "tr"
+                        );
+
+
+                    const size =
+                        formatFileSize(
+                            source.file_size
+                        );
+
+
+                    const statusClass =
+                        getStatusClass(
+                            source.status
+                        );
+
+
+                    const uploaded =
+                        source.created_at
+                            ? new Date(
+                                source.created_at
+                            ).toLocaleString()
+                            : "-";
+
+
+                    row.innerHTML = `
+
+                        <td>
+                            ${escapeHtml(
+                                source.name
+                            )}
+                        </td>
+
+                        <td>
+                            ${escapeHtml(
+                                source.source_type
+                            ).toUpperCase()}
+                        </td>
+
+                        <td>
+                            ${size}
+                        </td>
+
+                        <td>
+
+                            <span
+                                class="status ${statusClass}"
+                            >
+                                ${escapeHtml(
+                                    source.status
+                                )}
+                            </span>
+
+                        </td>
+
+                        <td>
+                            ${uploaded}
+                        </td>
+
+                    `;
+
+
+                    documentsBody.appendChild(
+                        row
+                    );
+
+                }
+            );
+        }
+        catch (error) {
+
+            documentsBody.innerHTML =
+                `
+                <tr>
+                    <td
+                        colspan="5"
+                        class="empty"
+                    >
+                        ${escapeHtml(
+                            error.message
+                        )}
+                    </td>
+                </tr>
+                `;
+
+        }
+
+    }
+
+
+    // --------------------------------
+    // Upload document
+    // --------------------------------
+
+    async function uploadDocument() {
+
+        const projectId =
+            projectSelect.value;
+
+
+        const fileInput =
+            document.getElementById(
+                "file"
+            );
+
+
+        const file =
+            fileInput.files[0];
+
+
+        if (!projectId) {
+
+            showMessage(
+                "Please select a project.",
+                true
+            );
+
+            return;
+
+        }
+
+
+        if (!file) {
+
+            showMessage(
+                "Please select a document.",
+                true
+            );
+
+            return;
+
+        }
+
+
+        const formData =
+            new FormData();
+
+
+        formData.append(
+            "file",
+            file
+        );
+
+
+        uploadButton.disabled =
+            true;
+
+        uploadButton.textContent =
+            "Uploading...";
+
+
+        showMessage(
+            "Uploading and processing document...",
+            false
+        );
+
+
+        try {
+
+            const response =
+                await fetch(
+                    `${API_BASE_URL}/projects/${projectId}/sources`,
+                    {
+                        method: "POST",
+
+                        body: formData
+                    }
+                );
+
+
+            const result =
+                await response.json();
+
+
+            if (!response.ok) {
+
+                throw new Error(
+                    result.detail ||
+                    "Upload failed."
+                );
+
+            }
+
+
+            if (
+                result.status ===
+                "failed"
+            ) {
+
+                throw new Error(
+                    result.message ||
+                    "Document processing failed."
+                );
+
+            }
+
+
+            showMessage(
+                "Document uploaded successfully.",
+                false
+            );
+
+
+            fileInput.value = "";
+
+
+            await loadDocuments(
+                projectId
+            );
+
+        }
+        catch (error) {
+
+            showMessage(
+                error.message,
+                true
+            );
+
+        }
+        finally {
+
+            uploadButton.disabled =
+                false;
+
+            uploadButton.textContent =
+                "Upload Document";
+
+        }
+
+    }
+
+
+    // --------------------------------
+    // Helpers
+    // --------------------------------
+
+    function formatFileSize(
+        bytes
+    ) {
+
+        if (!bytes) {
+            return "0 B";
+        }
+
+
+        const units = [
+            "B",
+            "KB",
+            "MB",
+            "GB"
+        ];
+
+
+        let size = bytes;
+        let index = 0;
+
+
+        while (
+            size >= 1024 &&
+            index < units.length - 1
+        ) {
+
+            size /= 1024;
+            index++;
+
+        }
+
+
+        return (
+            size.toFixed(1)
+            + " "
+            + units[index]
+        );
+
+    }
+
+
+    function getStatusClass(
+        status
+    ) {
+
+        switch (
+            status.toLowerCase()
+        ) {
+
+            case "completed":
+                return "status-completed";
+
+            case "processing":
+                return "status-processing";
+
+            case "failed":
+                return "status-failed";
+
+            case "pending":
+                return "status-pending";
+
+            default:
+                return "status-pending";
+
+        }
+
+    }
+
+
+    function showMessage(
+        text,
+        isError
+    ) {
+
+        message.textContent =
+            text;
+
+        message.style.display =
+            "block";
+
+        message.style.background =
+            isError
+                ? "#fee2e2"
+                : "#dcfce7";
+
+        message.style.color =
+            isError
+                ? "#991b1b"
+                : "#166534";
+
+    }
+
+
+    function escapeHtml(
+        value
+    ) {
+
+        const div =
+            document.createElement(
+                "div"
+            );
+
+        div.textContent =
+            value ?? "";
+
+        return div.innerHTML;
+
+    }
+
+
+    // --------------------------------
+    // Initial load
+    // --------------------------------
+
+    loadProjects();
+
+</script>
+
+</body>
+
+</html>

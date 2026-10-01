@@ -1,9 +1,15 @@
 from pathlib import Path
 
-from fastapi import APIRouter, File, UploadFile
+from fastapi import (
+    APIRouter,
+    File,
+    UploadFile,
+)
 
 from services.source_service import add_source
-from services.ingestion_service import ingest_text_source
+from services.ingestion_service import (
+    ingest_source,
+)
 
 
 router = APIRouter(
@@ -12,11 +18,32 @@ router = APIRouter(
 )
 
 
+SUPPORTED_TYPES = {
+    "txt",
+    "pdf",
+    "docx",
+    "mp3",
+    "wav",
+    "m4a",
+    "mp4",
+    "mov",
+    "avi",
+    "jpg",
+    "jpeg",
+    "png",
+    "webp",
+}
+
+
 @router.post("/{project_id}/sources")
 async def upload_source(
     project_id: str,
     file: UploadFile = File(...),
 ):
+
+    # ---------------------------------
+    # Save temporary upload
+    # ---------------------------------
 
     temp_directory = Path("temp")
 
@@ -25,39 +52,121 @@ async def upload_source(
         exist_ok=True,
     )
 
-    temp_file = temp_directory / file.filename
+    file_name = Path(
+        file.filename or "uploaded_file"
+    ).name
+
+    temp_file = (
+        temp_directory / file_name
+    )
 
     content = await file.read()
 
-    temp_file.write_bytes(content)
+    temp_file.write_bytes(
+        content
+    )
+
+    # ---------------------------------
+    # Determine source type
+    # ---------------------------------
 
     source_type = (
-        Path(file.filename)
+        Path(file_name)
         .suffix
         .lower()
         .replace(".", "")
         or "unknown"
     )
 
+    # ---------------------------------
+    # Store original file
+    # ---------------------------------
+
     source = add_source(
         project_id=project_id,
         file_path=str(temp_file),
         source_type=source_type,
-        mime_type=file.content_type
-        or "application/octet-stream",
+        mime_type=(
+            file.content_type
+            or "application/octet-stream"
+        ),
     )
 
-    if source_type == "txt":
+    # ---------------------------------
+    # Unsupported file
+    # ---------------------------------
 
-        ingest_text_source(
+    if source_type not in SUPPORTED_TYPES:
+
+        from database.repository import (
+            update_knowledge_source_status,
+        )
+
+        update_knowledge_source_status(
+            source.id,
+            "failed",
+        )
+
+        source = update_knowledge_source_status(
+            source.id,
+            "failed",
+        )
+
+        return {
+            "id": source.id,
+            "project_id": source.project_id,
+            "name": source.name,
+            "source_type": source.source_type,
+            "mime_type": source.mime_type,
+            "file_size": source.file_size,
+            "status": source.status,
+            "message": (
+                f"Unsupported file type: "
+                f".{source_type}"
+            ),
+        }
+
+    # ---------------------------------
+    # Ingest immediately
+    # ---------------------------------
+
+    try:
+
+        source = ingest_source(
             source_id=source.id,
         )
 
-        source_status = "completed"
+    except Exception as exc:
 
-    else:
+        # ingest_source already changes
+        # status to failed.
 
-        source_status = source.status
+        source = (
+            __import__(
+                "database.repository",
+                fromlist=[
+                    "get_knowledge_source"
+                ],
+            )
+            .get_knowledge_source(
+                source.id
+            )
+        )
+
+        return {
+            "id": source.id,
+            "project_id": source.project_id,
+            "name": source.name,
+            "source_type": source.source_type,
+            "mime_type": source.mime_type,
+            "file_size": source.file_size,
+            "status": source.status,
+            "message": str(exc),
+        }
+
+    # ---------------------------------
+    # Return final status
+    # ---------------------------------
 
     return {
         "id": source.id,
@@ -66,7 +175,7 @@ async def upload_source(
         "source_type": source.source_type,
         "mime_type": source.mime_type,
         "file_size": source.file_size,
-        "status": source_status,
+        "status": source.status,
     }
 
 
