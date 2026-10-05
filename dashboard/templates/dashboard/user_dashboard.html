@@ -20,6 +20,7 @@
 
         body {
             margin: 0;
+
             font-family:
                 Arial,
                 Helvetica,
@@ -29,65 +30,91 @@
             color: #1f2937;
         }
 
+
         .header {
             background: white;
-            border-bottom: 1px solid #e5e7eb;
+
+            border-bottom:
+                1px solid #e5e7eb;
+
             padding: 18px 32px;
 
             display: flex;
-            justify-content: space-between;
+
+            justify-content:
+                space-between;
+
             align-items: center;
         }
+
 
         .logo {
             font-size: 21px;
             font-weight: 700;
         }
 
+
         .container {
             max-width: 900px;
+
             margin: 50px auto;
+
             padding: 0 20px;
         }
 
+
         .title {
             text-align: center;
+
             margin-bottom: 35px;
         }
 
+
         .title h1 {
             margin-bottom: 10px;
+
             font-size: 32px;
         }
+
 
         .title p {
             color: #6b7280;
         }
 
+
         .card {
             background: white;
+
             border-radius: 12px;
+
             padding: 25px;
 
-            border: 1px solid #e5e7eb;
+            border:
+                1px solid #e5e7eb;
 
             box-shadow:
                 0 4px 15px
                 rgba(0, 0, 0, 0.04);
         }
 
+
         label {
             display: block;
+
             font-weight: 600;
+
             margin-bottom: 8px;
         }
+
 
         select,
         textarea {
 
             width: 100%;
 
-            border: 1px solid #d1d5db;
+            border:
+                1px solid #d1d5db;
+
             border-radius: 8px;
 
             padding: 12px;
@@ -99,12 +126,14 @@
             background: white;
         }
 
+
         textarea {
 
             min-height: 120px;
 
             resize: vertical;
         }
+
 
         button {
 
@@ -113,20 +142,29 @@
             padding: 13px;
 
             border: none;
+
             border-radius: 8px;
 
             background: #2563eb;
+
             color: white;
 
             font-size: 16px;
+
             font-weight: 600;
 
             cursor: pointer;
         }
 
+
         button:hover {
             background: #1d4ed8;
         }
+
+
+        /* ---------------------------------------
+           AI ANSWER
+        --------------------------------------- */
 
         .answer {
 
@@ -138,39 +176,215 @@
 
             border-radius: 10px;
 
-            border: 1px solid #e5e7eb;
+            border:
+                1px solid #e5e7eb;
 
             min-height: 100px;
+
+            line-height: 1.7;
         }
+
 
         .answer-title {
 
             font-weight: 600;
 
-            margin-bottom: 10px;
+            margin-bottom: 15px;
+
+            font-size: 16px;
         }
+
+
+        /*
+         * Markdown-rendered answer
+         */
+
+        #answerText {
+            color: #1f2937;
+
+            font-size: 15px;
+        }
+
+
+        #answerText p {
+            margin:
+                0 0 14px 0;
+        }
+
+
+        #answerText p:last-child {
+            margin-bottom: 0;
+        }
+
+
+        #answerText h1,
+        #answerText h2,
+        #answerText h3,
+        #answerText h4 {
+
+            margin-top: 20px;
+
+            margin-bottom: 10px;
+
+            line-height: 1.35;
+        }
+
+
+        #answerText h1 {
+            font-size: 24px;
+        }
+
+
+        #answerText h2 {
+            font-size: 21px;
+        }
+
+
+        #answerText h3 {
+            font-size: 18px;
+        }
+
+
+        #answerText h4 {
+            font-size: 16px;
+        }
+
+
+        #answerText h1:first-child,
+        #answerText h2:first-child,
+        #answerText h3:first-child,
+        #answerText h4:first-child {
+            margin-top: 0;
+        }
+
+
+        #answerText ul,
+        #answerText ol {
+
+            margin-top: 8px;
+
+            margin-bottom: 16px;
+
+            padding-left: 28px;
+        }
+
+
+        #answerText li {
+
+            margin-bottom: 7px;
+
+            padding-left: 3px;
+        }
+
+
+        #answerText strong {
+            font-weight: 700;
+        }
+
+
+        #answerText em {
+            font-style: italic;
+        }
+
+
+        #answerText code {
+
+            background: #e5e7eb;
+
+            padding:
+                2px 5px;
+
+            border-radius: 4px;
+
+            font-family:
+                Consolas,
+                "Courier New",
+                monospace;
+
+            font-size: 13px;
+        }
+
+
+        #answerText pre {
+
+            background: #111827;
+
+            color: #f9fafb;
+
+            padding: 14px;
+
+            border-radius: 8px;
+
+            overflow-x: auto;
+
+            margin:
+                12px 0 16px 0;
+        }
+
+
+        #answerText pre code {
+
+            background: transparent;
+
+            padding: 0;
+
+            color: inherit;
+        }
+
+
+        /* ---------------------------------------
+           SOURCES
+        --------------------------------------- */
 
         .sources {
 
             margin-top: 20px;
+
+            padding-top: 15px;
+
+            border-top:
+                1px solid #e5e7eb;
 
             font-size: 14px;
 
             color: #6b7280;
         }
 
+
+        .sources strong {
+            color: #374151;
+        }
+
+
+        .source-item {
+            margin-top: 5px;
+        }
+
+
+        /* ---------------------------------------
+           MOBILE
+        --------------------------------------- */
+
         @media (max-width: 600px) {
 
             .header {
-                padding: 15px 20px;
+                padding:
+                    15px 20px;
             }
+
 
             .container {
                 margin-top: 25px;
             }
 
+
             .title h1 {
                 font-size: 26px;
+            }
+
+
+            .card {
+                padding: 18px;
             }
 
         }
@@ -222,8 +436,6 @@
                 <option value="">
                     Select a project
                 </option>
-
-                <!-- Projects will be loaded from FastAPI -->
 
             </select>
 
@@ -278,6 +490,12 @@
             "http://127.0.0.1:8001";
 
 
+        /*
+         * ----------------------------------------
+         * Load Projects
+         * ----------------------------------------
+         */
+
         async function loadProjects() {
 
             try {
@@ -287,13 +505,25 @@
                         `${API_BASE_URL}/projects/`
                     );
 
+
+                if (!response.ok) {
+
+                    throw new Error(
+                        "Failed to load projects."
+                    );
+
+                }
+
+
                 const projects =
                     await response.json();
+
 
                 const select =
                     document.getElementById(
                         "project"
                     );
+
 
                 projects.forEach(
                     project => {
@@ -303,11 +533,14 @@
                                 "option"
                             );
 
+
                         option.value =
                             project.id;
 
+
                         option.textContent =
                             project.name;
+
 
                         select.appendChild(
                             option
@@ -329,6 +562,421 @@
         }
 
 
+        /*
+         * ----------------------------------------
+         * Escape HTML
+         *
+         * Important security step.
+         *
+         * We never directly trust HTML returned
+         * by the LLM.
+         * ----------------------------------------
+         */
+
+        function escapeHtml(value) {
+
+            const div =
+                document.createElement(
+                    "div"
+                );
+
+
+            div.textContent =
+                value;
+
+
+            return div.innerHTML;
+        }
+
+
+        /*
+         * ----------------------------------------
+         * Inline Markdown Formatting
+         *
+         * Supports:
+         *
+         * **bold**
+         * *italic*
+         * `code`
+         * ----------------------------------------
+         */
+
+        function renderInlineMarkdown(
+            text
+        ) {
+
+            let html =
+                escapeHtml(text);
+
+
+            /*
+             * Inline code
+             */
+
+            html =
+                html.replace(
+                    /`([^`]+)`/g,
+                    "<code>$1</code>"
+                );
+
+
+            /*
+             * Bold
+             */
+
+            html =
+                html.replace(
+                    /\*\*(.+?)\*\*/g,
+                    "<strong>$1</strong>"
+                );
+
+
+            /*
+             * Italic
+             */
+
+            html =
+                html.replace(
+                    /(?<!\*)\*([^*]+)\*(?!\*)/g,
+                    "<em>$1</em>"
+                );
+
+
+            return html;
+        }
+
+
+        /*
+         * ----------------------------------------
+         * Markdown → HTML
+         *
+         * Supports:
+         *
+         * # Heading
+         * ## Heading
+         * ### Heading
+         *
+         * - Bullet
+         * * Bullet
+         *
+         * 1. Numbered item
+         *
+         * Paragraphs
+         * ----------------------------------------
+         */
+
+        function renderMarkdown(
+            markdown
+        ) {
+
+            if (
+                !markdown ||
+                !markdown.trim()
+            ) {
+
+                return "";
+
+            }
+
+
+            const lines =
+                markdown
+                    .replace(/\r\n/g, "\n")
+                    .split("\n");
+
+
+            let html = "";
+
+            let paragraphLines = [];
+
+            let inUnorderedList = false;
+
+            let inOrderedList = false;
+
+            let inCodeBlock = false;
+
+            let codeLines = [];
+
+
+            function flushParagraph() {
+
+                if (
+                    paragraphLines.length === 0
+                ) {
+
+                    return;
+
+                }
+
+
+                const paragraph =
+                    paragraphLines
+                        .join(" ")
+                        .trim();
+
+
+                if (paragraph) {
+
+                    html +=
+                        `<p>${renderInlineMarkdown(
+                            paragraph
+                        )}</p>`;
+
+                }
+
+
+                paragraphLines = [];
+
+            }
+
+
+            function closeLists() {
+
+                if (inUnorderedList) {
+
+                    html += "</ul>";
+
+                    inUnorderedList =
+                        false;
+
+                }
+
+
+                if (inOrderedList) {
+
+                    html += "</ol>";
+
+                    inOrderedList =
+                        false;
+
+                }
+
+            }
+
+
+            for (
+                let index = 0;
+                index < lines.length;
+                index++
+            ) {
+
+                const line =
+                    lines[index];
+
+
+                /*
+                 * Code block
+                 */
+
+                if (
+                    line.trim()
+                        .startsWith("```")
+                ) {
+
+                    flushParagraph();
+
+                    closeLists();
+
+
+                    if (!inCodeBlock) {
+
+                        inCodeBlock =
+                            true;
+
+                        codeLines = [];
+
+                    }
+                    else {
+
+                        html +=
+                            `<pre><code>${escapeHtml(
+                                codeLines.join("\n")
+                            )}</code></pre>`;
+
+                        inCodeBlock =
+                            false;
+
+                        codeLines = [];
+
+                    }
+
+                    continue;
+                }
+
+
+                if (inCodeBlock) {
+
+                    codeLines.push(
+                        line
+                    );
+
+                    continue;
+                }
+
+
+                /*
+                 * Blank line
+                 */
+
+                if (
+                    line.trim() === ""
+                ) {
+
+                    flushParagraph();
+
+                    continue;
+
+                }
+
+
+                /*
+                 * Headings
+                 */
+
+                const headingMatch =
+                    line.match(
+                        /^(#{1,4})\s+(.+)$/
+                    );
+
+
+                if (headingMatch) {
+
+                    flushParagraph();
+
+                    closeLists();
+
+
+                    const level =
+                        headingMatch[1].length;
+
+
+                    const headingText =
+                        headingMatch[2];
+
+
+                    html +=
+                        `<h${level}>${renderInlineMarkdown(
+                            headingText
+                        )}</h${level}>`;
+
+                    continue;
+                }
+
+
+                /*
+                 * Unordered list
+                 */
+
+                const unorderedMatch =
+                    line.match(
+                        /^\s*[-*+]\s+(.+)$/
+                    );
+
+
+                if (unorderedMatch) {
+
+                    flushParagraph();
+
+
+                    if (!inUnorderedList) {
+
+                        closeLists();
+
+                        html += "<ul>";
+
+                        inUnorderedList =
+                            true;
+
+                    }
+
+
+                    html +=
+                        `<li>${renderInlineMarkdown(
+                            unorderedMatch[1]
+                        )}</li>`;
+
+                    continue;
+                }
+
+
+                /*
+                 * Ordered list
+                 */
+
+                const orderedMatch =
+                    line.match(
+                        /^\s*\d+\.\s+(.+)$/
+                    );
+
+
+                if (orderedMatch) {
+
+                    flushParagraph();
+
+
+                    if (!inOrderedList) {
+
+                        closeLists();
+
+                        html += "<ol>";
+
+                        inOrderedList =
+                            true;
+
+                    }
+
+
+                    html +=
+                        `<li>${renderInlineMarkdown(
+                            orderedMatch[1]
+                        )}</li>`;
+
+                    continue;
+                }
+
+
+                /*
+                 * Normal text
+                 */
+
+                closeLists();
+
+                paragraphLines.push(
+                    line.trim()
+                );
+
+            }
+
+
+            /*
+             * Finish remaining content
+             */
+
+            if (inCodeBlock) {
+
+                html +=
+                    `<pre><code>${escapeHtml(
+                        codeLines.join("\n")
+                    )}</code></pre>`;
+
+            }
+
+
+            flushParagraph();
+
+            closeLists();
+
+
+            return html;
+        }
+
+
+        /*
+         * ----------------------------------------
+         * Ask Question
+         * ----------------------------------------
+         */
+
         async function askQuestion() {
 
             const projectId =
@@ -336,15 +984,18 @@
                     "project"
                 ).value;
 
+
             const question =
                 document.getElementById(
                     "question"
                 ).value.trim();
 
+
             const answerText =
                 document.getElementById(
                     "answerText"
                 );
+
 
             const sources =
                 document.getElementById(
@@ -357,6 +1008,8 @@
                 answerText.textContent =
                     "Please select a project.";
 
+                sources.innerHTML = "";
+
                 return;
 
             }
@@ -367,6 +1020,8 @@
                 answerText.textContent =
                     "Please enter a question.";
 
+                sources.innerHTML = "";
+
                 return;
 
             }
@@ -374,6 +1029,7 @@
 
             answerText.textContent =
                 "Thinking...";
+
 
             sources.innerHTML = "";
 
@@ -392,19 +1048,40 @@
                             },
 
                             body: JSON.stringify({
-                                question: question
+                                question:
+                                    question
                             })
                         }
                     );
+
+
+                if (!response.ok) {
+
+                    throw new Error(
+                        "Failed to get AI response."
+                    );
+
+                }
 
 
                 const result =
                     await response.json();
 
 
-                answerText.textContent =
-                    result.answer;
+                /*
+                 * Render Markdown returned by
+                 * the AI as formatted HTML.
+                 */
 
+                answerText.innerHTML =
+                    renderMarkdown(
+                        result.answer
+                    );
+
+
+                /*
+                 * Display sources
+                 */
 
                 if (
                     result.sources &&
@@ -412,29 +1089,62 @@
                 ) {
 
                     sources.innerHTML =
-                        "<strong>Sources:</strong><br>" +
-                        result.sources
-                            .map(
-                                source =>
-                                    source.source_name
-                            )
-                            .join("<br>");
+                        "<strong>Sources:</strong>";
+
+
+                    result.sources.forEach(
+                        source => {
+
+                            const sourceItem =
+                                document.createElement(
+                                    "div"
+                                );
+
+
+                            sourceItem.className =
+                                "source-item";
+
+
+                            sourceItem.textContent =
+                                source.source_name
+                                || "Unknown source";
+
+
+                            sources.appendChild(
+                                sourceItem
+                            );
+
+                        }
+                    );
 
                 }
 
             }
             catch (error) {
 
-                console.error(error);
+                console.error(
+                    "Chat error:",
+                    error
+                );
+
 
                 answerText.textContent =
                     "Unable to get an answer. "
                     + "Please try again.";
 
+
+                sources.innerHTML = "";
+
             }
 
         }
 
+
+        /*
+         * ----------------------------------------
+         * Initialize
+         * ----------------------------------------
+         */
 
         loadProjects();
 
