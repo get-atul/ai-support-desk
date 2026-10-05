@@ -1,6 +1,7 @@
 from pathlib import Path
 
 from core.vector_store import add_document
+from extractors.xlsx_extractor import extract_xlsx
 
 from database.repository import (
     get_knowledge_source,
@@ -29,6 +30,7 @@ SUPPORTED_TYPES = {
     "jpeg",
     "png",
     "webp",
+    "xlsx",
 }
 
 
@@ -108,7 +110,8 @@ def ingest_source(
             document = extract_docx(
                 **common_args
             )
-
+        elif source_type == "xlsx":
+            document = extract_xlsx(**common_args)
         elif source_type in {
             "mp3",
             "wav",

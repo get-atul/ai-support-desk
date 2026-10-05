@@ -36,6 +36,7 @@ SUPPORTED_TYPES = {
     "jpeg",
     "png",
     "webp",
+    "xlsx",
 }
 
 
